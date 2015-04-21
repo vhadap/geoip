@@ -3,33 +3,41 @@ package com.soha.geoip.test;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.util.Map;
 
 import com.soha.geoip.GeoIpServer;
+import com.soha.geoip.GeoIpService;
 
 public class GeoIpTests {
 	static String rmi_ip = "10.5.0.78";
-	static GeoIpServer geoIpServer;
+	static GeoIpService geoIpServer;
 	
 	static void getGeoIpData(String ip){
 		System.out.println("getGeoIpData");
-		InetAddress ipAddress = null;
+//		InetAddress ipAddress = null;
+//		try {
+//			ipAddress = InetAddress.getByName(ip);
+//		} catch (UnknownHostException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		long cts = System.currentTimeMillis();
+		Map data;
 		try {
-			ipAddress = InetAddress.getByName(ip);
-		} catch (UnknownHostException e) {
+			data = geoIpServer.getIpData(ip);
+			long tts = (System.currentTimeMillis() - cts);
+			System.out.println(ip+" took "+tts + " ms: "+data);
+		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		long cts = System.currentTimeMillis();
-		Map data = geoIpServer.getIpData(ipAddress);
-		long tts = (System.currentTimeMillis() - cts);
-		System.out.println(ip+" took "+tts + " ms: "+data);
 
 	}
 	
 	public static void main(String[] args) throws Exception {
 		// Call registry for GeoIpServer
-		geoIpServer = (GeoIpServer) Naming.lookup("rmi://" + rmi_ip + "/GeoIpServer");
+		geoIpServer = (GeoIpService) Naming.lookup("rmi://" + rmi_ip + "/GeoIpServer");
 		
 		getGeoIpData("128.101.101.101");
 		getGeoIpData("202.83.18.161");
