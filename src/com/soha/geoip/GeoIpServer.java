@@ -54,27 +54,26 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 	public Map getIpData(String ip) throws RemoteException{
 		Map ret = new LinkedHashMap();
 		try {
-			InetAddress ipAddress = InetAddress.getByName(ip);
 			// Replace "city" with the appropriate method for your database, e.g.,
 			// "country".
-			CityResponse response = reader.city(ipAddress);
+			CityResponse response = reader.city(InetAddress.getByName(ip));
 
 			Country country = response.getCountry();
 			//			System.out.println(country.getIsoCode());            // 'US'
 			//			System.out.println(country.getName());               // 'United States'
 			//			System.out.println(country.getNames().get("zh-CN")); // '美国'
-			ret.put("Country", country.getName());
-			ret.put("CC", country.getIsoCode());
+			//ret.put("country", country.getName());
+			ret.put("cc", country.getIsoCode());
 
 			Subdivision subdivision = response.getMostSpecificSubdivision();
 			//			System.out.println(subdivision.getName());    // 'Minnesota'
 			//			System.out.println(subdivision.getIsoCode()); // 'MN'
-			ret.put("State", subdivision.getName());
-			ret.put("SC", subdivision.getIsoCode());
+			ret.put("state", subdivision.getName());
+			ret.put("sc", subdivision.getIsoCode());
 
 			City city = response.getCity();
 			//			System.out.println(city.getName()); // 'Minneapolis'
-			ret.put("City", city.getName());
+			ret.put("city", city.getName());
 
 			Postal postal = response.getPostal();
 			//			System.out.println(postal.getCode()); // '55455'
@@ -82,8 +81,8 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 			Location location = response.getLocation();
 			//			System.out.println(location.getLatitude());  // 44.9733
 			//			System.out.println(location.getLongitude()); // -93.2323
-			ret.put("Lat", location.getLatitude());
-			ret.put("Long", location.getLongitude());
+			ret.put("lat", location.getLatitude());
+			ret.put("long", location.getLongitude());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -126,24 +125,6 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 	public static void main ( String args[] ) throws Exception
 	{
 		System.out.println("Starting GeoIpServer...");
-		System.out.println("GeoIpServer Class.forName: "+Class.forName ("com.soha.geoip.GeoIpService").getName());
-		ClassLoader cl = ClassLoader.getSystemClassLoader();
-
-		URL[] urls = ((URLClassLoader)cl).getURLs();
-
-		for(URL url: urls){
-			System.out.println(url.getFile());
-		}
-
-		try {
-
-			Class loadedClass = Class.forName("com.soha.geoip.GeoIpService");
-			System.out.println("Class " + loadedClass + " found successfully!");
-		}
-		catch (ClassNotFoundException ex) {
-			System.err.println("A ClassNotFoundException was caught: " + ex.getMessage());
-			ex.printStackTrace();
-		}
 
 		// Assign a security manager, in the event that dynamic
 		// classes are loaded
@@ -161,7 +142,7 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 		registry.bind("GeoIpServer", svr);
 
 
-		System.out.println ("GeoIpServer bound....");
+		System.out.println ("GeoIpServer started...");
 	}
 
 
