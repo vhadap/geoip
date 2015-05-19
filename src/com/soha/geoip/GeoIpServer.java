@@ -38,7 +38,7 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 		synchronized(this){
 			if (database == null){
 				try {
-					database = new File("//home/sbapp/software/geoip/GeoIP2-City_20150414/GeoIP2-City.mmdb");
+					database = new File("//home/sbapp/software/geoip/GeoIP/GeoIP.mmdb");
 					// This creates the DatabaseReader object, which should be reused across
 					// lookups.
 					reader = new DatabaseReader.Builder(database).build();
