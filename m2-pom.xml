@@ -18,6 +18,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+        <groupId>com.maxmind.db</groupId>
+        <artifactId>maxmind-db</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+    <dependency>
         <groupId>com.maxmind.geoip2</groupId>
         <artifactId>geoip2</artifactId>
         <version>2.1.0</version>
@@ -25,7 +30,38 @@
   </dependencies>
   <build>
       <sourceDirectory>src</sourceDirectory>
+      <resources>
+         <resource>
+            <directory>.</directory>
+            <includes>
+               <include>conf/*</include>
+            </includes>
+         </resource>
+      </resources>
+
       <plugins>
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+               <descriptorRefs>
+                  <descriptorRef>jar-with-dependencies</descriptorRef>
+               </descriptorRefs>
+               <archive>
+                  <manifest>
+                     <mainClass />
+                  </manifest>
+               </archive>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>make-assembly</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>single</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
