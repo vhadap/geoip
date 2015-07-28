@@ -1,0 +1,1 @@
+sudo /home/sbapp/software/jdk1.8.0_40/bin/java -classpath /home/sbapp/software/jdk1.8.0_40/jre/lib/rt.jar:/home/sbapp/software/geoip/target/geoip-1.0-SNAPSHOT-jar-with-dependencies.jar -Dlog4j.configuration=file:./conf/log4j.properties com.soha.geoip.GeoIpServer &

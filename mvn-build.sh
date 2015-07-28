@@ -1,0 +1,1 @@
+mvn -f m2-pom.xml clean package
