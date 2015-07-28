@@ -4,10 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.rmi.Naming;
-import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -15,6 +11,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.security.Permission;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import com.maxmind.geoip2.*;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
@@ -25,6 +23,8 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 
 	private static final long serialVersionUID = 213218932983171382L;
 
+	public static Logger LOG = Logger.getLogger(GeoIpServer.class);
+			
 	// A File object pointing to your GeoIP2 or GeoLite2 database
 	static File database = null;
 	static DatabaseReader reader;
@@ -44,6 +44,7 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 					reader = new DatabaseReader.Builder(database).build();
 				} catch (IOException e) {
 					e.printStackTrace();
+					LOG.error(e.getMessage());
 					System.exit(0);
 				}
 			}
@@ -87,9 +88,11 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 		} catch (GeoIp2Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 
 		return ret;
@@ -125,6 +128,7 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 	public static void main ( String args[] ) throws Exception
 	{
 		System.out.println("Starting GeoIpServer...");
+		LOG.info("Starting GeoIpServer...");
 
 		// Assign a security manager, in the event that dynamic
 		// classes are loaded
@@ -143,6 +147,7 @@ public class GeoIpServer extends UnicastRemoteObject implements GeoIpService, Se
 
 
 		System.out.println ("GeoIpServer started...");
+		LOG.info("GeoIpServer started...");
 	}
 
 
